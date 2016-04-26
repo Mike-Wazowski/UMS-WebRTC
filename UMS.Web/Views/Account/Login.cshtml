@@ -12,6 +12,7 @@
     @Styles.Render("~/Content/css")
     @Styles.Render("~/Content/signin")
     @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("~/Content/toastr")
 </head>
 <body>
     <div class="container"> 
@@ -31,5 +32,11 @@
     </div>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/toastr")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            showNotification(@Html.Raw(Json.Encode(Model)));
+        });
+    </script>
 </body>
 </html>

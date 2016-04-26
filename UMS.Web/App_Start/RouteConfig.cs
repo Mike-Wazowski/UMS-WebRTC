@@ -9,6 +9,7 @@ namespace UMS.Web
 {
     public class RouteConfig
     {
+        public static RouteCollection Routes { get; set; }
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");

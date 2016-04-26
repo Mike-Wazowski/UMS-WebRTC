@@ -16,23 +16,37 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("WebRTC", "Index", "Dashboard", new { area = "" }, new { @class = "navbar-brand" })
             </div>
-            <div class="navbar-collapse collapse">
+            <div class="pull-right navbar-collapse collapse">
                 <ul class="nav navbar-nav">
+                    <li><a href="@Url.Action("LogOut", "Account")">Wyloguj się</a></li>
                 </ul>
             </div>
         </div>
     </div>
 
-    <div class="container body-content">
+    <div class="container body-content body-margin-top">
         @RenderBody()
-        <hr />
         @Html.Partial("_Footer")
     </div>
 
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/signalR")
     @Scripts.Render("~/bundles/bootstrap")
+    <script src="/signalr/hubs" type="text/javascript"></script>
+    <script>
+$(function () {
+  // Reference the auto-generated proxy for the hub.
+  var userActivity = $.connection.userActivityHub;
+  // Create a function that the hub can call back to display messages.
+  userActivity.client.updateUsersOnlineCount = function (users) {
+    // Add the message to the page.
+      $('#usersCount').text(users);
+  };
+  $.connection.hub.start();
+});
+    </script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

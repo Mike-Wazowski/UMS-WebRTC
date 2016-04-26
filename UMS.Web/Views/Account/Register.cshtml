@@ -1,0 +1,46 @@
+﻿@model UMS.Web.ViewModels.RegisterViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Register</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("~/Content/signin")
+    @Styles.Render("~/Content/toastr")
+</head>
+<body>
+    <div class="container">
+        @using (Html.BeginForm("Register", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-signin", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <h2 class="form-signin-heading">Zarejestruj się</h2>
+            @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", placeholder = "Imie", required = "", autofocus = "" })
+            @Html.ValidationMessageFor(m => m.FirstName)
+            @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", placeholder = "Nazwisko", required = "", autofocus = "" })
+            @Html.ValidationMessageFor(m => m.LastName)
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email", type = "email", required = "", autofocus = "" })
+            @Html.ValidationMessageFor(m => m.Email)
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Hasło", type = "password", required = "", autofocus = "" })
+            @Html.ValidationMessageFor(m => m.Password)
+            @Html.PasswordFor(m => m.PasswordConfirmation, new { @class = "form-control", placeholder = "Powtórz hasło", type = "password", required = "", autofocus = "" })
+            @Html.ValidationMessageFor(m => m.PasswordConfirmation)
+            <button type="submit" class="btn btn-lg btn-primary btn-block">Zarejestruj się</button>
+        } 
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/toastr")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            showNotification(@Html.Raw(Json.Encode(Model)));
+        });
+    </script>
+</body>
+</html>

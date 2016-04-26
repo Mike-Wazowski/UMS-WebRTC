@@ -9,7 +9,7 @@ using UMS.Web.Validators;
 namespace UMS.Web.ViewModels
 {
     [Validator(typeof(LoginViewModelValidator))]
-    public class LoginViewModel
+    public class LoginViewModel: BaseViewModel
     {
         public string Email { get; set; }
         [Display(Name = "Hasło")]

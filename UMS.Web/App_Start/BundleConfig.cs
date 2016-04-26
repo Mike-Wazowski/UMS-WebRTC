@@ -11,7 +11,7 @@ namespace UMS.Web
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery.js"));
+                        "~/Scripts/jquery-1.9.1.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                         "~/Scripts/bootstrap.min.js"));
@@ -22,6 +22,16 @@ namespace UMS.Web
 
             bundles.Add(new StyleBundle("~/Content/signin").Include(
                         "~/Content/signin.css"));
+
+            bundles.Add(new StyleBundle("~/Content/toastr").Include(
+                        "~/Content/toastr.min.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/toastr").Include(
+                        "~/Scripts/toastr.min.js",
+                        "~/Scripts/toastrActivator.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/signalR").Include(
+                        "~/Scripts/jquery.signalR-2.2.0.min.js"));
         }
     }
 }
