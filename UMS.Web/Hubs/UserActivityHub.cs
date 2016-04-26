@@ -23,10 +23,10 @@ namespace UMS.Web.Hubs
         public override System.Threading.Tasks.Task OnConnected()
         {
             string clientId = GetClientId();
-
-            if(Users.Where(x => x.ClientId == clientId).FirstOrDefault() == null)
+            var email = Context.User.Identity.Name;
+            if (Users.Where(x => x.ClientId == clientId || x.Email == email).FirstOrDefault() == null)
             {
-                Users.Add(new OnlineUser(clientId, Context.User.Identity.Name));
+                Users.Add(new OnlineUser(clientId, email));
             }
 
             // Send the current count of users
@@ -38,9 +38,10 @@ namespace UMS.Web.Hubs
         public override System.Threading.Tasks.Task OnReconnected()
         {
             string clientId = GetClientId();
-            if (Users.Where(x => x.ClientId == clientId).FirstOrDefault() == null)
+            var email = Context.User.Identity.Name;
+            if (Users.Where(x => x.ClientId == clientId || x.Email == email).FirstOrDefault() == null)
             {
-                Users.Add(new OnlineUser(clientId, Context.User.Identity.Name));
+                Users.Add(new OnlineUser(clientId, email));
             }
 
             // Send the current count of users
