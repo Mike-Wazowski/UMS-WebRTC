@@ -51,7 +51,12 @@
   <ItemGroup>
     <Compile Include="Implementations\UmsDbContext.cs" />
     <Compile Include="IUmsDbContext.cs" />
+    <Compile Include="Migrations\201604252208329_UpdateUserModel.cs" />
+    <Compile Include="Migrations\201604252208329_UpdateUserModel.Designer.cs">
+      <DependentUpon>201604252208329_UpdateUserModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Migrations\Initialization\DatabaseInitialization.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -63,6 +68,11 @@
       <Project>{ec70155b-da34-44c8-a989-1f5ca57f87e5}</Project>
       <Name>UMS.Database.Models</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201604252208329_UpdateUserModel.resx">
+      <DependentUpon>201604252208329_UpdateUserModel.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

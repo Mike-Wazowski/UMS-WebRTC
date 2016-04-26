@@ -18,10 +18,19 @@ namespace UMS.Database.Models
         public string Email { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string PhoneNumber { get; set; }
         [Required]
         public string Password { get; set; }
         [Required]
         public string Salt { get; set; }
+
+        public User() { }
+        public User(string email, string firstName, string lastName, string password, string salt)
+        {
+            Email = email;
+            FirstName = firstName;
+            LastName = lastName;
+            Password = password;
+            Salt = salt;
+        }
     }
 }

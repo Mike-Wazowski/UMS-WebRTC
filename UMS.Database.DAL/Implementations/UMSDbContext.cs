@@ -13,5 +13,9 @@ namespace UMS.Database.DAL.Implementations
         public IDbSet<User> Users { get; set; }
 
         public UmsDbContext() : base("name=UmsDbContext") { }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+        }
     }
 }
