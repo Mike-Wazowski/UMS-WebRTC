@@ -6,6 +6,7 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -20,7 +21,7 @@
             </div>
             <div class="pull-right navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="@Url.Action("LogOut", "Account")">Wyloguj się</a></li>
+                    <li><a href="@Url.Action("LogOut", "Account")" id="logOutBtn">Wyloguj się</a></li>
                 </ul>
             </div>
         </div>
@@ -31,22 +32,9 @@
         @Html.Partial("_Footer")
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/signalR")
+    
+    
     @Scripts.Render("~/bundles/bootstrap")
-    <script src="/signalr/hubs" type="text/javascript"></script>
-    <script>
-$(function () {
-  // Reference the auto-generated proxy for the hub.
-  var userActivity = $.connection.userActivityHub;
-  // Create a function that the hub can call back to display messages.
-  userActivity.client.updateUsersOnlineCount = function (users) {
-    // Add the message to the page.
-      $('#usersCount').text(users);
-  };
-  $.connection.hub.start();
-});
-    </script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

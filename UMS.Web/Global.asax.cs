@@ -16,7 +16,6 @@ namespace UMS.Web
         {
             DatabaseConfig.InitializeDatabase();
             AreaRegistration.RegisterAllAreas();
-            //RouteTable.Routes.MapHubs();
             RouteConfig.Routes = RouteTable.Routes;
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             FluentValidationModelValidatorProvider.Configure();

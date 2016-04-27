@@ -5,6 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Threading.Tasks;
+using UMS.Database.DAL;
+using System.Data.Entity;
+using UMS.Web.Hubs.HubModels;
+using AutoMapper;
 
 namespace UMS.Web.Hubs
 {
@@ -12,12 +16,24 @@ namespace UMS.Web.Hubs
     public class UserActivityHub : Hub
     {
         public static List<OnlineUser> Users = new List<OnlineUser>();
+        public readonly IUmsDbContext _context;
 
-        public void Send(string users)
+        public UserActivityHub()
+        {
+            try
+            {
+                _context = (IUmsDbContext)Autofac.Integration.Mvc.AutofacDependencyResolver.Current.GetService(typeof(IUmsDbContext));
+            }
+            catch(InvalidOperationException ex)//User closed tab. We catch this exception so OnDisconnected method can run
+            {
+            }
+        }
+
+        public void Send(List<OnlineUser> users)
         {
             // Call the addNewMessageToPage method to update clients.
             var context = GlobalHost.ConnectionManager.GetHubContext<UserActivityHub>();
-            context.Clients.All.updateUsersOnlineCount(users);
+            context.Clients.All.updateUsersOnlineCount(users.Select(x => new { x.Email, x.FirstName, x.LastName, x.UserStatus }).ToArray());
         }
 
         public override System.Threading.Tasks.Task OnConnected()
@@ -26,11 +42,17 @@ namespace UMS.Web.Hubs
             var email = Context.User.Identity.Name;
             if (Users.Where(x => x.ClientId == clientId || x.Email == email).FirstOrDefault() == null)
             {
-                Users.Add(new OnlineUser(clientId, email));
+                var user = _context.Users.Where(x => x.Email == email).AsNoTracking().FirstOrDefault();
+                if (user != null)
+                {
+                    var onlineUserModel = Mapper.Map<OnlineUser>(user);
+                    onlineUserModel.ClientId = clientId;
+                    Users.Add(onlineUserModel);
+                }
             }
 
             // Send the current count of users
-            Send(string.Join(";\n\r", Users.Select(x => x.Email).ToArray()));
+            Send(Users);
 
             return base.OnConnected();
         }
@@ -41,11 +63,17 @@ namespace UMS.Web.Hubs
             var email = Context.User.Identity.Name;
             if (Users.Where(x => x.ClientId == clientId || x.Email == email).FirstOrDefault() == null)
             {
-                Users.Add(new OnlineUser(clientId, email));
+                var user = _context.Users.Where(x => x.Email == email).AsNoTracking().FirstOrDefault();
+                if (user != null)
+                {
+                    var onlineUserModel = Mapper.Map<OnlineUser>(user);
+                    onlineUserModel.ClientId = clientId;
+                    Users.Add(onlineUserModel);
+                }
             }
 
             // Send the current count of users
-            Send(string.Join(";\n\r", Users.Select(x => x.Email).ToArray()));
+            Send(Users);
 
             return base.OnReconnected();
         }
@@ -60,7 +88,7 @@ namespace UMS.Web.Hubs
             }
 
             // Send the current count of users
-            Send(string.Join(";\n\r", Users.Select(x => x.Email).ToArray()));
+            Send(Users);
 
             return base.OnDisconnected(stopCalled);
         }
