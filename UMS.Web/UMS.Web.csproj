@@ -216,6 +216,8 @@
     <Content Include="Content\toastr.scss" />
     <Content Include="Content\toastr.less" />
     <Content Include="scripts\dataTables\Polish.json" />
+    <None Include="Properties\PublishProfiles\umsWebRTC - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\umsWebRTC - Web Deploy.pubxml" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\dataTables\dataTables.bootstrap.js" />
     <Content Include="scripts\dataTables\dataTables.responsive.js" />
@@ -257,6 +259,8 @@
     <Compile Include="Helpers\MappingExpressionExtensions.cs" />
     <Compile Include="Hubs\HubModels\OnlineUser.cs" />
     <Compile Include="Hubs\HubModels\OnlineUserStatus.cs" />
+    <Compile Include="Hubs\HubModels\RTCIceCandidate.cs" />
+    <Compile Include="Hubs\HubModels\RTCSessionDescription.cs" />
     <Compile Include="Hubs\UserActivityHub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />

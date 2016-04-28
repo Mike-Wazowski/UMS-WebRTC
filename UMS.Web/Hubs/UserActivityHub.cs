@@ -29,11 +29,69 @@ namespace UMS.Web.Hubs
             }
         }
 
-        public void Send(List<OnlineUser> users)
+        public void SendUserList(List<OnlineUser> users)
         {
             // Call the addNewMessageToPage method to update clients.
             var context = GlobalHost.ConnectionManager.GetHubContext<UserActivityHub>();
-            context.Clients.All.updateUsersOnlineCount(users.Select(x => new { x.Email, x.FirstName, x.LastName, x.UserStatus }).ToArray());
+            context.Clients.All.updateUsersOnline(users.Select(x => new { x.Email, x.FirstName, x.LastName, x.UserStatus }).ToArray());
+        }
+
+        [HubMethodName("callUser")]
+        public void CallUser(string targetEmail, RTCSessionDescription offer)
+        {
+            var targetUser = Users.Where(x => x.Email == targetEmail).FirstOrDefault();
+            var sourceUser = Users.Where(x => x.Email == Context.User.Identity.Name).FirstOrDefault();
+            if(targetUser == null || sourceUser == null)
+            {
+#warning display error to user
+                return;
+            }
+            else
+            {
+                //targetUser.UserStatus = OnlineUserStatus.Busy;
+                //sourceUser.UserStatus = OnlineUserStatus.Busy;
+                SendUserList(Users);
+                SendOffer(targetUser, sourceUser, offer);
+            }
+        }
+
+        [HubMethodName("answerUser")]
+        public void AnswerUser(string callingEmail, RTCSessionDescription answer)
+        {
+            var answeringUser = Users.Where(x => x.Email == Context.User.Identity.Name).FirstOrDefault();
+            var callingUser = Users.Where(x => x.Email == callingEmail).FirstOrDefault();
+            if (answeringUser == null || callingUser == null)
+            {
+#warning display error to user
+                return;
+            }
+            else
+            {
+                SendAnswer(answeringUser, callingUser, answer);
+            }
+        }
+
+        [HubMethodName("sendCandidate")]
+        public void SendCandidate(string receiverEmail, RTCIceCandidate candidate)
+        {
+            var receiverUser = Users.Where(x => x.Email == receiverEmail).FirstOrDefault();
+            if(receiverUser != null)
+            {
+                var context = GlobalHost.ConnectionManager.GetHubContext<UserActivityHub>();
+                context.Clients.Client(receiverUser.ClientId).incommingCandidate(candidate);
+            }
+        }
+
+        private void SendAnswer(OnlineUser answeringUser, OnlineUser callingUser, RTCSessionDescription answer)
+        {
+            var context = GlobalHost.ConnectionManager.GetHubContext<UserActivityHub>();
+            context.Clients.Client(callingUser.ClientId).incommingAnswer(answeringUser, answer);
+        }
+
+        private void SendOffer(OnlineUser targetUser, OnlineUser sourceUser, RTCSessionDescription offer)
+        {
+            var context = GlobalHost.ConnectionManager.GetHubContext<UserActivityHub>();
+            context.Clients.Client(targetUser.ClientId).incommingCall(sourceUser, offer);
         }
 
         public override System.Threading.Tasks.Task OnConnected()
@@ -52,7 +110,7 @@ namespace UMS.Web.Hubs
             }
 
             // Send the current count of users
-            Send(Users);
+            SendUserList(Users);
 
             return base.OnConnected();
         }
@@ -73,7 +131,7 @@ namespace UMS.Web.Hubs
             }
 
             // Send the current count of users
-            Send(Users);
+            SendUserList(Users);
 
             return base.OnReconnected();
         }
@@ -88,7 +146,7 @@ namespace UMS.Web.Hubs
             }
 
             // Send the current count of users
-            Send(Users);
+            SendUserList(Users);
 
             return base.OnDisconnected(stopCalled);
         }

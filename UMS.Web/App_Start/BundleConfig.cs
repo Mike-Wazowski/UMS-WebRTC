@@ -33,12 +33,12 @@ namespace UMS.Web
             bundles.Add(new ScriptBundle("~/bundles/signalR").Include(
                         "~/Scripts/jquery.signalR-2.2.0.min.js"));
 
-            bundles.Add(new StyleBundle("~/Content/dataTables").Include(
+            bundles.Add(new StyleBundle("~/Content/dataTablesStyles").Include(
                       "~/Content/dataTables/dataTables.bootstrap.css",
                       "~/Content/dataTables/dataTables.responsive.css",
                       "~/Content/dataTables/dataTables.tableTools.min.css"));
 
-            bundles.Add(new ScriptBundle("~/bundles/dataTables").Include(
+            bundles.Add(new ScriptBundle("~/bundles/dataTablesScripts").Include(
                       "~/Scripts/dataTables/jquery.dataTables.js",
                       "~/Scripts/dataTables/dataTables.bootstrap.js",
                       "~/Scripts/dataTables/dataTables.responsive.js",
